@@ -1,5 +1,5 @@
-import React, {Fragment} from 'react';
-import {Page, Document, StyleSheet, View} from '@react-pdf/renderer';
+import React from 'react';
+import {Page, Document, StyleSheet} from '@react-pdf/renderer';
 import InvoiceTitle from '../../atoms/InvoiceTitle';
 import BillTo from '../../atoms/BillTo';
 import InvoiceNo from '../../atoms/InvoiceNo';

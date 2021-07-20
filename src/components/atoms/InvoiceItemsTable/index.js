@@ -2,10 +2,7 @@ import React from 'react';
 import {View, StyleSheet } from '@react-pdf/renderer';
 import InvoiceTableHeader from '../InvoiceTableHeader';
 import InvoiceTableRow from '../InvoiceTableRow';
-import InvoiceTableBlankSpace from '../InvoiceTableBlankSpace';
 import InvoiceTableFooter from '../InvoiceTableFooter';
-
-const tableRowsCount = 7;
 
 const styles = StyleSheet.create({
     tableContainer: {
