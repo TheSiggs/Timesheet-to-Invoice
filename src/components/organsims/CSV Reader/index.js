@@ -1,49 +1,47 @@
-import React, { Component } from 'react'
-
-import { CSVReader } from 'react-papaparse'
-
-const buttonRef = React.createRef()
-
-export default class CSV_Reader extends Component {
+import React, {Component} from 'react'
+import {CSVReader} from 'react-papaparse'
+export default class CSV_Reader extends React.Component {
     invoice_data = {};
-    line_items = [];
 
     jsonifyData = (data) => {
+        this.invoice_data['trans_date'] = new Date().toDateString();
         for (let item of data) {
-            console.log(item.data[0]);
-            if (item.data[0] == "Invoice #:") {
-                this.invoice_data['invoice_number'] = item.data[1];
-            }
-            else if (item.data[0] == "Hourly Rate:") {
-                this.invoice_data['rate'] = item.data[1];
-            }
-            else if (item.data[0] == "Recpient:") {
-                this.invoice_data['recipient'] = item.data[1];
-            }
-            else if (item.data[0] == "From:") {
-                this.invoice_data['from'] = item.data[1];
-            }
-            else if (item.data[0] == "Date") {
-                // this.invoice_data['line_items'] = [];
-
+            if (item.data[0] === "Invoice #:") {
+                this.invoice_data['id'] = "Invoice: " + item.data[1];
+                this.invoice_data['invoice_no'] = item.data[1];
+            } else if (item.data[0] === "Recpient:") {
+                this.invoice_data['company'] = item.data[1];
+            } else if (item.data[0] === "From:") {
+                // this.invoice_data['from'] = item.data[1];
+            } else if(item.data[0] === "Notes:"){
+                this.invoice_data['notes'] = item.data[1];
+            } else if (item.data[0] === "sno") {
+                this.invoice_data['items'] = [];
             } else {
-                if (item.data.length == 3) {
-                    this.line_items.push(item.data);
+                if (this.invoice_data['items'] !== undefined) {
+                    if(item.data[0] !== "") {
+                        let lineItem = {
+                            sno: item.data[0],
+                            desc: item.data[1],
+                            qty: item.data[2],
+                            rate: item.data[3],
+                        };
+                        this.invoice_data['items'].push(lineItem);
+                    }
                 }
-                // this.invoice_data['line_items'].push(item.data);
             }
         }
-        this.line_items.shift();
-        this.invoice_data["Items"] = this.line_items;
-        console.log(this.invoice_data)
-        // console.log(this.line_items)
+        let balance = 0;
+        this.invoice_data['items'].forEach( item => {
+            balance = balance + (item.qty * item.rate);
+            });
+        this.invoice_data['balance'] = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'NZD' }).format(balance);
     }
 
     handleOnDrop = (data) => {
-        console.log('---------------------------')
-        console.log(data)
-        console.log('---------------------------')
         this.jsonifyData(data);
+        console.log("Invoice data: ",this.invoice_data);
+        this.props.callbackFunction({invoiceData: this.invoice_data, isData: true});
     }
 
     handleOnError = (err, file, inputElem, reason) => {
