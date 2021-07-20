@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {CSVReader} from 'react-papaparse'
-export default class CSV_Reader extends React.Component {
+export default class Reader extends Component {
     invoice_data = {};
 
     jsonifyData = (data) => {
@@ -44,7 +44,7 @@ export default class CSV_Reader extends React.Component {
         this.props.callbackFunction({invoiceData: this.invoice_data, isData: true});
     }
 
-    handleOnError = (err, file, inputElem, reason) => {
+    handleOnError = (err) => {
         console.log(err)
     }
 

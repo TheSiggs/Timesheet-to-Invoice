@@ -3,7 +3,7 @@ import {PDFViewer} from '@react-pdf/renderer'
 import Invoice from './components/organsims/Invoice'
 
 import './App.css';
-import CSV_Reader from "./components/organsims/CSV Reader";
+import Reader from "./components/organsims/CSV Reader";
 
 class App extends Component {
 
@@ -18,7 +18,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                <CSV_Reader callbackFunction={this.callbackFunction}/>
+                <Reader callbackFunction={this.callbackFunction}/>
                 {this.state.isData ? (
                     <Fragment>
                         <PDFViewer width="1000" height="600" className="app">
@@ -26,7 +26,7 @@ class App extends Component {
                         </PDFViewer>
                     </Fragment>
                 ) : (
-                    <div></div>
+                    <div><p>-</p></div>
                 )
                 }
 
