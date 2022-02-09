@@ -1,10 +1,12 @@
 import React, {Component} from 'react'
 import {CSVReader} from 'react-papaparse'
+import { format } from 'date-fns'
+
 export default class Reader extends Component {
     invoice_data = {};
 
     jsonifyData = (data) => {
-        this.invoice_data['trans_date'] = new Date().toDateString();
+        this.invoice_data['trans_date'] = format(new Date(), 'PP');
         for (let item of data) {
             if (item.data[0] === "Invoice #:") {
                 this.invoice_data['id'] = "Invoice: " + item.data[1];
@@ -12,7 +14,7 @@ export default class Reader extends Component {
             } else if (item.data[0] === "Recpient:") {
                 this.invoice_data['company'] = item.data[1];
             } else if (item.data[0] === "From:") {
-                // this.invoice_data['from'] = item.data[1];
+                this.invoice_data['from'] = item.data[1];
             } else if(item.data[0] === "Notes:"){
                 this.invoice_data['notes'] = item.data[1];
             } else if (item.data[0] === "sno") {
